@@ -48,8 +48,42 @@
 
         function updateTitle() {
             const titleElement = document.getElementById('title');
-            titleElement.textContent = `Sardegna2 - Ricaricato ${loadCount} volte`;
+            titleElement.textContent = `Sardegna - Ricaricato ${loadCount} volte`;
         }
 
         function loadImage(index) {
-            const img = new
+            const img = new Image();
+            img.src = maps[index];
+            img.onload = () => {
+                const mapDiv = document.getElementById('map');
+                mapDiv.style.backgroundImage = `url(${maps[index]})`;
+                loadCount++;
+                updateTitle();
+            };
+        }
+
+        function preloadImages() {
+            maps.forEach((map) => {
+                const img = new Image();
+                img.src = map;
+            });
+        }
+
+        document.getElementById('prevButton').addEventListener('click', () => {
+            currentIndex = (currentIndex > 0) ? currentIndex - 1 : maps.length - 1;
+            loadImage(currentIndex);
+        });
+
+        document.getElementById('nextButton').addEventListener('click', () => {
+            currentIndex = (currentIndex < maps.length - 1) ? currentIndex + 1 : 0;
+            loadImage(currentIndex);
+        });
+
+        // Precarica tutte le immagini all'inizio, ma senza visualizzarle tutte
+        preloadImages();
+        // Inizializza la prima mappa
+        loadImage(currentIndex);
+    </script>
+
+</body>
+</html>
