@@ -3,77 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zoom Mappe Meteo</title>
+    <title>Visualizza Mappe Meteo4</title>
     <style>
         body {
-            margin: 0;
-            padding: 0;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            height: 100vh;
-            background-color: #000;
-            overflow: hidden;
+            font-family: Arial, sans-serif;
         }
-
-        .map-container {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
+        #map {
+            width: 600px;
+            height: 400px;
+            background-size: cover;
+            margin-bottom: 20px;
         }
-
-        iframe {
-            width: 200%;
-            height: 200%;
-            border: none;
-            transform-origin: top left;
-            transition: transform 0.3s;
-        }
-
-        .zoom-controls {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            z-index: 1000;
-            display: flex;
-            gap: 10px;
-            background-color: rgba(255, 255, 255, 0.8);
-            padding: 10px;
-            border-radius: 5px;
-        }
-
-        .zoom-controls input {
-            padding: 5px;
+        button {
+            padding: 10px 15px;
+            margin: 5px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <div class="map-container">
-        <iframe id="map" src="https://www.meteociel.fr/modeles/arpege.php?ech=3&mode=3&map=320"></iframe>
-        <div class="zoom-controls">
-            <label for="zoom">Zoom (%):</label>
-            <input type="number" id="zoom" value="100" min="50" max="300" onchange="applyZoom()">
-            <label for="positionX">X (%):</label>
-            <input type="number" id="positionX" value="90" min="0" max="100" onchange="applyPosition()">
-            <label for="positionY">Y (%):</label>
-            <input type="number" id="positionY" value="50" min="0" max="100" onchange="applyPosition()">
-        </div>
+
+    <div id="map"></div>
+    <div>
+        <button id="prevButton">Mappa Precedente</button>
+        <button id="nextButton">Mappa Successiva</button>
     </div>
 
     <script>
-        const iframe = document.getElementById('map');
+        const maps = [
+            'https://www.meteociel.fr/modeles/arpege/images/01h.png',
+            'https://www.meteociel.fr/modeles/arpege/images/02h.png', // Aggiungi qui altre mappe
+        ];
+        
+        let currentIndex = 0;
 
-        function applyZoom() {
-            const zoom = document.getElementById('zoom').value;
-            iframe.style.transform = `scale(${zoom / 100})`;
+        function updateMap() {
+            const mapDiv = document.getElementById('map');
+            mapDiv.style.backgroundImage = `url(${maps[currentIndex]})`;
         }
 
-        function applyPosition() {
-            const x = document.getElementById('positionX').value;
-            const y = document.getElementById('positionY').value;
-            iframe.style.transform = `translate(-${x}%, -${y}%) scale(${document.getElementById('zoom').value / 100})`;
-        }
+        document.getElementById('prevButton').addEventListener('click', () => {
+            currentIndex = (currentIndex > 0) ? currentIndex - 1 : maps.length - 1;
+            updateMap();
+        });
+
+        document.getElementById('nextButton').addEventListener('click', () => {
+            currentIndex = (currentIndex < maps.length - 1) ? currentIndex + 1 : 0;
+            updateMap();
+        });
+
+        // Inizializza la prima mappa
+        updateMap();
     </script>
+
 </body>
 </html>
