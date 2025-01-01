@@ -14,8 +14,8 @@
         #map {
             width: 600px;
             height: 400px;
-            background-size: 200%;
-            background-position: 55% 75%; /* Coordinata centrale per la Sardegna */
+            background-size: 166.67%; /* Per fare in modo che la Sardegna occupi il 60% della dimensione totale */
+            background-position: 50% 75%; /* Coordinata centrale per la Sardegna */
             margin-bottom: 20px;
         }
         button {
@@ -26,16 +26,12 @@
         h1 {
             margin-bottom: 20px;
         }
-        .sardegna {
-            background-position: 55% 75%; /* Coordinata centrale per la Sardegna */
-            background-size: 166.67%; /* Per fare in modo che la Sardegna occupi il 60% della dimensione totale */
-        }
     </style>
 </head>
 <body>
 
-    <h1>Sardegna</h1>
-    <div id="map" class="sardegna"></div>
+    <h1 id="title">Sardegna</h1>
+    <div id="map"></div>
     <div>
         <button id="prevButton">Mappa Precedente</button>
         <button id="nextButton">Mappa Successiva</button>
@@ -43,4 +39,17 @@
 
     <script>
         const maps = [];
-        for
+        for (let i = 0; i <= 113; i++) {
+            maps.push(`https://modeles7.meteociel.fr/modeles/arpege/runs/2025010112/arpegeit-3-${i}-0.png?01-15`);
+        }
+
+        let currentIndex = 0;
+        let loadCount = 1;
+
+        function updateTitle() {
+            const titleElement = document.getElementById('title');
+            titleElement.textContent = `Sardegna - Ricaricato ${loadCount} volte`;
+        }
+
+        function loadImage(index) {
+            const img = new
