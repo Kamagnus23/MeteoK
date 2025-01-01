@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zoom Mappe Meteo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .map-container {
+            position: relative;
+            width: 90%;
+            max-width: 800px;
+            height: 500px;
+            overflow: hidden;
+            border: 2px solid #ccc;
+            margin: 20px 0;
+        }
+
+        iframe {
+            width: 200%;
+            height: 200%;
+            border: none;
+            transform-origin: top left;
+            transition: transform 0.3s;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            width: 90%;
+            max-width: 800px;
+            margin-bottom: 20px;
+        }
+
+        .controls button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .controls button:hover {
+            background-color: #0056b3;
+        }
+
+        .zoom-controls {
+            margin-top: 10px;
+        }
+
+        .zoom-controls input {
+            margin-left: 10px;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Zoom Mappe Meteo MeteoCiel</h1>
+    </header>
+
+    <div class="map-container">
+        <iframe id="map" src="https://www.meteociel.fr/modeles/arpege.php?ech=3&mode=3&map=320"></iframe>
+    </div>
+
+    <div class="controls">
+        <button onclick="prevImage()">Precedente</button>
+        <button onclick="nextImage()">Successivo</button>
+    </div>
+
+    <div class="zoom-controls">
+        <label for="zoom">Zoom (%):</label>
+        <input type="number" id="zoom" value="100" min="50" max="300" onchange="applyZoom()">
+        <label for="positionX">X (%):</label>
+        <input type="number" id="positionX" value="0" min="0" max="100" onchange="applyPosition()">
+        <label for="positionY">Y (%):</label>
+        <input type="number" id="positionY" value="0" min="0" max="100" onchange="applyPosition()">
+    </div>
+
+    <script>
+        const iframe = document.getElementById('map');
+        let currentImageIndex = 3; // Indice iniziale dell'immagine
+
+        function updateIframeSrc() {
+            iframe.src = `https://www.meteociel.fr/modeles/arpege.php?ech=${currentImageIndex}&mode=3&map=320`;
+        }
+
+        function prevImage() {
+            if (currentImageIndex > 0) {
+                currentImageIndex--;
+                updateIframeSrc();
+            }
+        }
+
+        function nextImage() {
+            currentImageIndex++;
+            updateIframeSrc();
+        }
+
+        function applyZoom() {
+            const zoom = document.getElementById('zoom').value;
+            iframe.style.transform = `scale(${zoom / 100})`;
+        }
+
+        function applyPosition() {
+            const x = document.getElementById('positionX').value;
+            const y = document.getElementById('positionY').value;
+            iframe.style.transform = `translate(-${x}%, -${y}%) scale(${document.getElementById('zoom').value / 100})`;
+        }
+    </script>
+</body>
+</html>
