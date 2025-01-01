@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visualizza Mappe Meteo5</title>
+    <title>Visualizza Mappe Meteo</title>
     <style>
         body {
             display: flex;
@@ -39,15 +39,16 @@
         }
 
         let currentIndex = 0;
+        let isLoading = false;
 
         function loadImage(index) {
+            isLoading = true;
             const img = new Image();
             img.src = maps[index];
             img.onload = () => {
-                if (index === currentIndex) {
-                    const mapDiv = document.getElementById('map');
-                    mapDiv.style.backgroundImage = `url(${maps[index]})`;
-                }
+                const mapDiv = document.getElementById('map');
+                mapDiv.style.backgroundImage = `url(${maps[index]})`;
+                isLoading = false;
             };
         }
 
@@ -58,19 +59,23 @@
         }
 
         document.getElementById('prevButton').addEventListener('click', () => {
-            currentIndex = (currentIndex > 0) ? currentIndex - 1 : maps.length - 1;
-            document.getElementById('map').style.backgroundImage = `url(${maps[currentIndex]})`;
+            if (!isLoading) {
+                currentIndex = (currentIndex > 0) ? currentIndex - 1 : maps.length - 1;
+                loadImage(currentIndex);
+            }
         });
 
         document.getElementById('nextButton').addEventListener('click', () => {
-            currentIndex = (currentIndex < maps.length - 1) ? currentIndex + 1 : 0;
-            document.getElementById('map').style.backgroundImage = `url(${maps[currentIndex]})`;
+            if (!isLoading) {
+                currentIndex = (currentIndex < maps.length - 1) ? currentIndex + 1 : 0;
+                loadImage(currentIndex);
+            }
         });
 
         // Precarica tutte le immagini all'inizio
         preloadAllImages();
         // Inizializza la prima mappa
-        document.getElementById('map').style.backgroundImage = `url(${maps[currentIndex]})`;
+        loadImage(currentIndex);
     </script>
 
 </body>
