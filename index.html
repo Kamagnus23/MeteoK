@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visualizza Mappe Meteo</title>
+    <title>Visualizza Mappe Meteo5</title>
     <style>
         body {
             display: flex;
@@ -44,33 +44,33 @@
             const img = new Image();
             img.src = maps[index];
             img.onload = () => {
-                const mapDiv = document.getElementById('map');
-                mapDiv.style.backgroundImage = `url(${maps[index]})`;
+                if (index === currentIndex) {
+                    const mapDiv = document.getElementById('map');
+                    mapDiv.style.backgroundImage = `url(${maps[index]})`;
+                }
             };
         }
 
-        function preloadImages() {
-            // Precarica l'immagine successiva
-            if (currentIndex < maps.length - 1) loadImage(currentIndex + 1);
-            // Precarica l'immagine precedente
-            if (currentIndex > 0) loadImage(currentIndex - 1);
+        function preloadAllImages() {
+            for (let i = 0; i < maps.length; i++) {
+                loadImage(i);
+            }
         }
 
         document.getElementById('prevButton').addEventListener('click', () => {
             currentIndex = (currentIndex > 0) ? currentIndex - 1 : maps.length - 1;
-            loadImage(currentIndex);
-            preloadImages();
+            document.getElementById('map').style.backgroundImage = `url(${maps[currentIndex]})`;
         });
 
         document.getElementById('nextButton').addEventListener('click', () => {
             currentIndex = (currentIndex < maps.length - 1) ? currentIndex + 1 : 0;
-            loadImage(currentIndex);
-            preloadImages();
+            document.getElementById('map').style.backgroundImage = `url(${maps[currentIndex]})`;
         });
 
+        // Precarica tutte le immagini all'inizio
+        preloadAllImages();
         // Inizializza la prima mappa
-        loadImage(currentIndex);
-        preloadImages();
+        document.getElementById('map').style.backgroundImage = `url(${maps[currentIndex]})`;
     </script>
 
 </body>
